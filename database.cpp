@@ -37,18 +37,18 @@ static int localeCompare( void* /*arg*/, int len1, const void* data1,  int len2,
 
 DataBase::DataBase() {}
 
-void DataBase::restoreDataBase()
+APP_MSG DataBase::restoreDataBase()
 {
-    if(QFile::exists("example.db")){
-        return;
+    if(QFile::exists("data.db")){
+        return DB_IS_EXISTS;
     }
     /* Открываем соединение с БД */
     sqlite3* db;
-    if(sqlite3_open("example.db", &db) == SQLITE_OK){
+    if(sqlite3_open("data.db", &db) == SQLITE_OK){
         //Установлено
     }else{
         //Ошибка
-        return;
+        return NOT_CREATE_DB;
     }
 
     char *zErrMsg = 0;          //Текст сообщения об ошибке
@@ -64,7 +64,7 @@ void DataBase::restoreDataBase()
     if( rc != SQLITE_OK ){
         qDebug() << zErrMsg;
         sqlite3_free(zErrMsg);
-        return;
+        return NOT_CREATE_TABLE_USER;
     } else {
         qDebug() << "Таблица создана";
     }
@@ -73,4 +73,5 @@ void DataBase::restoreDataBase()
 
     /* Закрываем соединение с БД */
     sqlite3_close(db);
+    return DB_OK;
 }

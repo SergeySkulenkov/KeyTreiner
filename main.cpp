@@ -4,14 +4,17 @@
 #include <QSplashScreen>
 #include <QElapsedTimer>
 #include <QStyleFactory>
-#include "database.h"
+#include <QDebug>
+#include "data.h"
 
 void loadМodules(QSplashScreen* psplash)
 {
     QElapsedTimer time;
     time.start();
-    DataBase db;
-    db.restoreDataBase();
+    Data data;
+    if(!data.restoreDb()){
+        qDebug() << "Сообщение от сплеш страницы: Не удалось создать базу данных";
+    }
     for (int i = 0; i < 100; ) {
         if (time.elapsed() > 10){
             time.start();
